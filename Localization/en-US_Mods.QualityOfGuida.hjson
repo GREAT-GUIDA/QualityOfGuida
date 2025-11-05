@@ -1,0 +1,122 @@
+# This file will automatically update with entries for new content after a build and reload.
+Items: {
+	PaperItem: {
+		DisplayName: Paper
+		BlankDisplayName: Blank Paper
+		Tooltip: "[c/AAAAAA:Right-click to edit item tooltip]"
+	}
+
+	FlintItem: {
+		DisplayName: Flint and Steel
+		Tooltip: Used to activate Nether Portal
+	}
+
+	TorcherinoItem: {
+		DisplayName: Torcherino
+		Tooltip: Accelerates tile updates
+	}
+
+	BoneMealItem: {
+		DisplayName: Bone Meal
+		Tooltip: Grows plants
+	}
+
+	SpawnEggItem: {
+		DisplayName: Spawn Egg
+		EmptyDisplayName: Empty Spawn Egg
+		FilledDisplayName: "{0} Spawn Egg"
+		UnknownEnemy: Unknown Enemy
+		CaptureUsage: Use on enemies with banners to capture
+		SpawnUsage: Use to spawn {0}
+		CanCapture: Can Capture
+		Tooltip: Spawns enemies
+	}
+
+	SpawnerItem: {
+		DisplayName: Spawner
+		Tooltip: Place and load with spawn eggs to activate
+		SetSpawner: Spawner set to {0}
+	}
+
+	NameTagItem: {
+		DisplayName: Name Tag
+		Tooltip:
+			'''
+			Left-click to name NPCs
+			Named non-boss creatures won't naturally despawn
+			Right-click to edit content
+			Not consumed
+			'''
+	}
+}
+
+Tiles: {
+	NetherPortal.MapEntry: Nether Portal
+	SpawnerTile.MapEntry: Spawner
+}
+
+WorldGen: {
+	NetherPortalPassMessage: Generating Nether Portal
+	SpawnerPassMessage: Mods.QualityOfGuida.WorldGen.SpawnerPassMessage
+	SpawnEggPassMessage: Mods.QualityOfGuida.WorldGen.SpawnEggPassMessage
+}
+
+PaperText: {
+	NetherPortal:
+		'''
+		Surround with obsidian
+		Use flint and steel in the middle
+		'''
+	NameTag:
+		'''
+		Appropriate names will receive the world's response:
+		Giant
+		Mini
+		King
+		Hitbox
+		Boulder
+		Rainbow
+		Reverse
+		'''
+}
+
+Configs: {
+	ItemToggleConfig: {
+		EnablePaper: {
+			Label: "[i:QualityOfGuida/PaperItem] Enable Paper"
+			Tooltip: Also control its worldgen
+		}
+
+		DisplayName: Item Toggle Config
+
+		EnableFlint: {
+			Label: "[i:QualityOfGuida/FlintItem] Enable Flint"
+			Tooltip: Also control its worldgen
+		}
+
+		EnableNameTag: {
+			Label: "[i:QualityOfGuida/NameTagItem] Enable Name Tag"
+			Tooltip: Also control its worldgen
+		}
+
+		EnableBoneMeal: {
+			Label: "[i:QualityOfGuida/BoneMealItem] Enable Bone Meal"
+			Tooltip: ""
+		}
+
+		EnableSpawnEgg: {
+			Label: "[i:QualityOfGuida/SpawnEggItem] Enable Spawn Egg"
+			Tooltip: Also control its worldgen
+		}
+
+		EnableTorcherino: {
+			Label: "[i:QualityOfGuida/TorcherinoItem] Enable Torcherino"
+			Tooltip: ""
+		}
+
+		EnableSpawner: {
+			Label: "[i:QualityOfGuida/SpawnerItem] Enable Spawner"
+			Tooltip: Also control its worldgen
+		}
+	}
+}

@@ -1,0 +1,117 @@
+This mod mainly features 7 Quality of Life items from Minecraft. 
+None of them directly affect player combat.
+Fully supports multiplayer gaming.
+Made for the Mod Jam 2025 "Game Tribute".
+
+[h2]Paper[/h2]
+[list]
+[*]Crafted using wood
+[*]Right-click to edit its item description
+[*]Used for sharing information or writing tutorials
+[*]All items from this mod naturally spawn with a paper as an instruction manual
+[*]Can also be used to craft paper airplanes
+[/list]
+
+[h2]Name Tag[/h2]
+[list]
+[*]Crafted using paper and copper/tin bars, also spawns in surface chests
+[*]Used to rename creatures; renamed non-boss creatures won't naturally despawn
+[*]Certain names have special effects
+[*]Not consumed on use
+[/list]
+
+[h2]Flint and Steel[/h2]
+[list]
+[*]Crafted using hellstone and iron/lead bars, also spawns near abandoned portals on the surface
+[*]Used to activate nether portals
+[*]Supports smart cursor
+[/list]
+
+[h2]Bone Meal[/h2]
+[list]
+[*]Crafted using bones
+[*]Use on blocks to make dirt grow plants and accelerate growth of various plants; works on most modded plants
+[*]Supports smart cursor
+[/list]
+
+[h2]Torcherino[/h2]
+[list]
+[*]Crafted using ultra bright torch and fast clock
+[*]Accelerates nearby block updates, also effective when held
+[/list]
+
+[h2]Spawn Egg[/h2]
+[list]
+[*]Crafted using light soul and dark soul
+[*]Use empty spawn egg on enemies to convert it into corresponding enemy spawn egg
+[*]Use again to consume spawn egg and spawn corresponding enemy
+[*]Limited to enemies that have banners
+[*]Additionally, surface and underground chests now spawn with some specific monster spawn eggs
+[/list]
+
+[h2]Spawner[/h2]
+[list]
+[*]Crafted using terrarium and chlorophyte bars, also spawns naturally underground
+[*]After using spawn egg on spawner, it will continuously summon corresponding monsters
+[*]Spawn rate is limited by natural spawn rate; rare enemies also have reduced spawn rates
+[*]When mined, only drops some coins
+[/list]
+
+
+这个模组的内容主要是7个来自Minecraft的QoL物品，以及一些来自Minecraft的词缀，它们都不会直接影响玩家战斗
+完全支持多人游戏
+该mod是 Mod Jam 2025 "Game Tribute"参赛作品
+
+[h2]纸[/h2]
+[list]
+[*]使用木头制作
+[*]右键可以编辑其物品描述
+[*]用于传递信息，或者写教程
+[*]本mod的所有物品自然生成时都会附带一张纸作为说明书
+[*]另外可以用来做纸飞机
+[/list]
+
+[h2]命名牌[/h2]
+[list]
+[*]使用纸和铜/锡锭制作，另外也会生成于地表的箱子中
+[*]用于给生物重命名，被命名的非boss生物不会自然刷新
+[*]部分名称有特殊效果
+[*]不消耗
+[/list]
+
+[h2]打火石[/h2]
+[list]
+[*]使用狱石和铁/铅锭制作，也会自然生成于地表的废弃传送门边
+[*]用于激活下界传送门
+[*]支持智能光标
+[/list]
+
+[h2]骨粉[/h2]
+[list]
+[*]使用骨头制作
+[*]对物块使用，让泥土长出植物，以及催熟各种植物，对大部分Mod植物也有效
+[*]支持智能光标
+[/list]
+
+[h2]加速火把[/h2]
+[list]
+[*]使用超亮火把和快走时钟制作
+[*]加速附近物块的更新，手持时也有效
+[/list]
+
+[h2]刷怪蛋[/h2]
+[list]
+[*]使用光明之魂和暗影之魂制作
+[*]空刷怪蛋对敌人使用，可以转化为对应敌人刷怪蛋
+[*]再次使用消耗刷怪蛋，生成对应敌人
+[*]仅限拥有旗帜的敌人
+[*]另外，地表和地下的箱子里现在会生成一些特定怪物的刷怪蛋
+[/list]
+
+[h2]刷怪笼[/h2]
+[list]
+[*]使用饲养笼和叶绿锭制作，也会在地下自然生成
+[*]对刷怪笼使用刷怪蛋后，刷怪笼会持续召唤对应怪物
+[*]召唤速率受自然生成率限制，稀有敌人召唤速率也会变低
+[*]挖掘后只会掉落一些钱币
+[/list]

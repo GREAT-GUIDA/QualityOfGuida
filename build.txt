@@ -1,0 +1,6 @@
+displayName = 7 Useful Items from Minecraft
+author = Guida
+version = 0.1111
+hideCode = false
+hideResources = false
+includeSource = true

@@ -1,0 +1,122 @@
+# This file will automatically update with entries for new content after a build and reload.
+Items: {
+	PaperItem: {
+		DisplayName: 纸
+		BlankDisplayName: 白纸
+		Tooltip: "[c/AAAAAA:右键以编辑物品提示 ]"
+	}
+
+	FlintItem: {
+		DisplayName: 打火石
+		Tooltip: 用于激活下界传送门
+	}
+
+	TorcherinoItem: {
+		DisplayName: 加速火把
+		Tooltip: 加速物块更新
+	}
+
+	BoneMealItem: {
+		DisplayName: 骨粉
+		Tooltip: 催熟植物
+	}
+
+	SpawnEggItem: {
+		DisplayName: 刷怪蛋
+		EmptyDisplayName: 空刷怪蛋
+		FilledDisplayName: "{0}刷怪蛋"
+		UnknownEnemy: 未知敌人
+		CaptureUsage: 对拥有旗帜的敌人使用来捕获
+		SpawnUsage: 使用以生成{0}
+		CanCapture: 可捕获
+		Tooltip: 生成敌人
+	}
+
+	SpawnerItem: {
+		DisplayName: 刷怪笼
+		Tooltip: 放置后装入刷怪蛋生效
+		SetSpawner: 生成生物已设为{0}
+	}
+
+	NameTagItem: {
+		DisplayName: 命名牌
+		Tooltip:
+			'''
+			左键使用为NPC命名
+			被命名的非BOSS生物不会自然刷新
+			右键使用修改内容
+			不消耗
+			'''
+	}
+}
+
+Tiles: {
+	NetherPortal.MapEntry: 下界传送门
+	SpawnerTile.MapEntry: 刷怪笼
+}
+
+WorldGen: {
+	NetherPortalPassMessage: 生成下界传送门
+	// SpawnerPassMessage: Mods.QualityOfGuida.WorldGen.SpawnerPassMessage
+	// SpawnEggPassMessage: Mods.QualityOfGuida.WorldGen.SpawnEggPassMessage
+}
+
+PaperText: {
+	NetherPortal:
+		'''
+		把黑曜石围成一圈
+		用打火石点击中间
+		'''
+	NameTag:
+		'''
+		合适的名字将得到世界的回应：
+		Giant
+		Mini
+		King
+		Hitbox
+		Boulder
+		Rainbow
+		Reverse
+		'''
+}
+
+Configs: {
+	ItemToggleConfig: {
+		EnablePaper: {
+			Label: "[i:QualityOfGuida/PaperItem] 开启纸"
+			Tooltip: 也控制其自然生成
+		}
+
+		DisplayName: 物品加载开关
+
+		EnableFlint: {
+			Label: "[i:QualityOfGuida/FlintItem] 开启打火石"
+			Tooltip: 也控制其自然生成
+		}
+
+		EnableNameTag: {
+			Label: "[i:QualityOfGuida/NameTagItem] 开启命名牌"
+			Tooltip: 也控制其自然生成
+		}
+
+		EnableBoneMeal: {
+			Label: "[i:QualityOfGuida/BoneMealItem] 开启骨粉"
+			Tooltip: ""
+		}
+
+		EnableSpawnEgg: {
+			Label: "[i:QualityOfGuida/SpawnEggItem] 开启刷怪蛋"
+			Tooltip: 也控制其自然生成
+		}
+
+		EnableTorcherino: {
+			Label: "[i:QualityOfGuida/TorcherinoItem] 开启加速火把"
+			Tooltip: ""
+		}
+
+		EnableSpawner: {
+			Label: "[i:QualityOfGuida/SpawnerItem] 开启刷怪笼"
+			Tooltip: 也控制其自然生成
+		}
+	}
+}
