@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections;
+using GuidaSharedCode;
 using QualityOfGuida.Content.Flint;
 using Terraria.Localization;
 
@@ -76,7 +77,7 @@ namespace QualityOfGuida.Content
                 }
             });
             
-            if (converter.LoadImageFromTextureDirect(ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalGround1").Value)) {
+            if (converter.LoadImageFromTextureDirect(ModAsset.NetherPortalGround1.Value)) {
                 converter.GenerateTiles(mouseX, mouseY);
             }
             
@@ -90,7 +91,7 @@ namespace QualityOfGuida.Content
             converter.SetColorMapping(Color.Blue, TileActionConfig.Wall(true, WallID.GrayBrick));
 
 
-            if (converter.LoadImageFromTextureDirect(ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalGround2").Value)) {
+            if (converter.LoadImageFromTextureDirect(ModAsset.NetherPortalGround2.Value)) {
                 converter.GenerateTiles(mouseX, mouseY);
             }
 
@@ -98,7 +99,7 @@ namespace QualityOfGuida.Content
 
             converter.TilePaintPreset();
 
-            if (converter.LoadImageFromTextureDirect(ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalGround3").Value)) {
+            if (converter.LoadImageFromTextureDirect(ModAsset.NetherPortalGround3.Value)) {
                 converter.GenerateTiles(mouseX, mouseY);
             }
         }

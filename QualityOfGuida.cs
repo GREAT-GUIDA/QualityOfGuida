@@ -1,6 +1,8 @@
+using GuidaSharedCode;
 using Microsoft.Xna.Framework;
 using QualityOfGuida.Content.SpawnEgg;
 using QualityOfGuida.Content.Spawner;
+using QualityOfGuida.Content.Torcherino;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,13 +15,13 @@ namespace QualityOfGuida {
     public class QualityOfGuida : Mod {
         public static int KingBossHeadIndex { get; private set; } = -1;
         public override void Load() {
-            ModAssets.Load(this);
-            KingBossHeadIndex = AddBossHeadTexture("QualityOfGuida/Content/NameTag/KingBossHead");
+            KingBossHeadIndex = AddBossHeadTexture(ModAsset.KingBossHead_Mod);
         }
 
         public override void Unload() {
-            ModAssets.Unload();
             NetworkManager.Clear();
+            SpawnEggBannerColors.ClearCache();
+            TorcherinoSystem.ClearStaticState();
         }
         public enum MessageType : byte {
             SyncMousePosition,

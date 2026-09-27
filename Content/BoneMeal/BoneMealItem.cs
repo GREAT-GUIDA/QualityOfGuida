@@ -7,9 +7,9 @@ using System;
 using QualityOfGuida.Content.SmartCursor;
 using tModPorter;
 using QualityOfGuida.Content.Torcherino;
-using QualityOfGuida.Content.Particles;
 using System.Reflection;
 using Terraria.ModLoader.UI;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.BoneMeal {
     public class BoneMealItem : ModItem {

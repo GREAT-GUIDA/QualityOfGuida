@@ -10,7 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Graphics.CameraModifiers;
-using QualityOfGuida.Content.Particles;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Flint {
     public class NetherPortalTileEntity : ModTileEntity {
@@ -142,7 +142,7 @@ namespace QualityOfGuida.Content.Flint {
                 player.shimmering = false;
                 player.shimmerWet = false;
                 player.wet = false;
-                player.ClearBuff(353);
+                player.ClearBuff(BuffID.Shimmer);
             }
 
             PressurePlateHelper.UpdatePlayerPosition(player);
@@ -364,7 +364,7 @@ namespace QualityOfGuida.Content.Flint {
 
             // 播放音效
             SoundEngine.PlaySound(SoundID.Dig, new Vector2(left * 16 + 32, top * 16 + 40));
-            SoundEngine.PlaySound(ModAssets.PortalAmbience, new Vector2(left * 16 + 32, top * 16 + 40));
+            SoundEngine.PlaySound(QoGSound.PortalAmbience, new Vector2(left * 16 + 32, top * 16 + 40));
 
             // 放置传送门瓦片
             for (int x = 0; x < PORTAL_WIDTH; x++) {
@@ -429,7 +429,7 @@ namespace QualityOfGuida.Content.Flint {
         public void EnderTeleport(Player player, Vector2 newPos) {
             try {
                 // 播放传送音效
-                SoundEngine.PlaySound(ModAssets.PortalArrive, player.position);
+                SoundEngine.PlaySound(QoGSound.PortalArrive, player.position);
 
                 player.environmentBuffImmunityTimer = 4;
                 player.RemoveAllGrapplingHooks();
@@ -440,7 +440,7 @@ namespace QualityOfGuida.Content.Flint {
                     player.shimmering = false;
                     player.shimmerWet = false;
                     player.wet = false;
-                    player.ClearBuff(353);
+                    player.ClearBuff(BuffID.Shimmer);
                 }
 
                 // 执行传送
@@ -488,7 +488,7 @@ namespace QualityOfGuida.Content.Flint {
             if (particleManager == null) return;
 
             Vector2 arrivalCenter = player.Center;
-            SoundEngine.PlaySound(ModAssets.PortalArrive, arrivalCenter);
+            SoundEngine.PlaySound(QoGSound.PortalArrive, arrivalCenter);
 
             // 生成到达粒子效果
             for (int i = 0; i < 40; i++) {

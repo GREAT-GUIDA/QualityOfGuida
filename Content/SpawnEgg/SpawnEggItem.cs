@@ -1,14 +1,12 @@
-﻿using Microsoft.Build.Tasks;
+﻿using GuidaSharedCode;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using QualityOfGuida.Content.Particles;
+using QualityOfGuida;
 using QualityOfGuida.Content.SmartCursor;
 using QualityOfGuida.Content.Spawner;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.IO;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -23,7 +21,6 @@ namespace QualityOfGuida.Content.SpawnEgg {
         public int storedBannerID = 0;
         private string npcName = "";
         private RenderTarget2D cachedTexture = null;
-        private static Dictionary<int, ColorPair> bannerColorCache = new Dictionary<int, ColorPair>();
         public NPC targetNPC;
 
         // NPC预览相关字段
@@ -33,17 +30,6 @@ namespace QualityOfGuida.Content.SpawnEgg {
         private Vector2 spawnPosition;
         public override bool IsLoadingEnabled(Mod mod) {
             return ModContent.GetInstance<ItemToggleConfig>().EnableSpawnEgg;
-        }
-        public struct ColorPair {
-            public Color Primary;
-            public Color Secondary;
-            public bool HasSecondary;
-
-            public ColorPair(Color primary, Color secondary = default, bool hasSecondary = false) {
-                Primary = primary;
-                Secondary = secondary;
-                HasSecondary = hasSecondary;
-            }
         }
 
         public static bool HasBanner(NPC npc) => Item.NPCtoBanner(npc.BannerID()) > 0;
@@ -77,11 +63,7 @@ namespace QualityOfGuida.Content.SpawnEgg {
             if (cachedTexture != null && !cachedTexture.IsDisposed) {
                 return cachedTexture;
             }
-            string fallbackTexturePath = storedBannerID > 0
-                ? "QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Filled4"
-                : "QualityOfGuida/Content/SpawnEgg/SpawnEggItem";
-
-            return ModContent.Request<Texture2D>(fallbackTexturePath).Value;
+            return storedBannerID > 0 ? ModAsset.SpawnEggItem_Filled4.Value : ModAsset.SpawnEggItem.Value;
         }
 
         // 更新预览图标
@@ -153,296 +135,9 @@ namespace QualityOfGuida.Content.SpawnEgg {
             return result;
         }
 
-        // 原有的颜色提取和纹理生成方法保持不变...
         private void GenerateCachedTexture() {
-            cachedTexture?.Dispose();
-            cachedTexture = null;
-
-            if (Main.graphics?.GraphicsDevice == null) return;
-
-            var device = Main.graphics.GraphicsDevice;
-            var renderTargets = device.GetRenderTargets();
-            RenderTarget2D previousTarget = renderTargets.Length > 0 ? renderTargets[0].RenderTarget as RenderTarget2D : null;
-
-            try {
-                int bannerItem = Item.BannerToItem(storedBannerID);
-                bool hasAsset = ModContent.HasAsset("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Filled" + bannerItem.ToString());
-                if (storedBannerID == 0 || hasAsset) {
-                    var emptyTexture = ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
-                    if (hasAsset) emptyTexture = ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Filled" + bannerItem, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
-                    if (emptyTexture == null) return;
-
-                    cachedTexture = new RenderTarget2D(device, emptyTexture.Width, emptyTexture.Height);
-
-                    device.SetRenderTarget(cachedTexture);
-                    device.Clear(Color.Transparent);
-
-                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                    Main.spriteBatch.Draw(emptyTexture, Vector2.Zero, Color.LightGray);
-                    Main.spriteBatch.End();
-
-                    device.SetRenderTarget(previousTarget ?? Main.screenTarget);
-                } else {
-                    if (!bannerColorCache.TryGetValue(storedBannerID, out ColorPair colorPair)) {
-                        colorPair = ExtractThemeColorsFromBanner(storedBannerID);
-                    }
-
-                    var primaryTexture = colorPair.HasSecondary ?
-                        ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Filled1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value :
-                        ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Filled5", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-                    var secondaryTexture = colorPair.HasSecondary ?
-                        ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Filled3", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value : null;
-
-                    if (primaryTexture == null) return;
-
-                    cachedTexture = new RenderTarget2D(device, primaryTexture.Width, primaryTexture.Height);
-
-                    device.SetRenderTarget(cachedTexture);
-                    device.Clear(Color.Transparent);
-
-                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-                    Main.spriteBatch.Draw(primaryTexture, Vector2.Zero, colorPair.Primary);
-
-                    if (colorPair.HasSecondary && secondaryTexture != null) {
-                        Main.spriteBatch.Draw(secondaryTexture, Vector2.Zero, colorPair.Secondary);
-                    }
-
-                    Main.spriteBatch.End();
-
-                    device.SetRenderTarget(previousTarget ?? Main.screenTarget);
-                }
-            } catch (Exception ex) {
-                cachedTexture?.Dispose();
-                cachedTexture = null;
-                ModContent.GetInstance<QualityOfGuida>().Logger.Error($"Failed to generate cached texture: {ex.Message}");
-            }
+            SpawnEggTextures.Regenerate(storedBannerID, ref cachedTexture);
         }
-
-        private ColorPair ExtractThemeColorsFromBanner(int bannerID) {
-            // 获取对应的物品ID
-            int itemID = Item.BannerToItem(bannerID);
-
-            // 获取物品贴图
-            Main.instance.LoadItem(itemID);
-            Texture2D bannerTexture = TextureAssets.Item[itemID].Value;
-
-            // 提取像素数据
-            Color[] pixels = new Color[bannerTexture.Width * bannerTexture.Height];
-            bannerTexture.GetData(pixels);
-
-            // 降采样并过滤像素
-            List<Color> validPixels = new List<Color>();
-            for (int y = 0; y < bannerTexture.Height; y += 2) {
-                for (int x = 0; x < bannerTexture.Width; x += 2) {
-                    Color pixel = pixels[y * bannerTexture.Width + x];
-                    // 只排除完全透明的像素
-                    if (pixel.A > 0) {
-                        validPixels.Add(pixel);
-                    }
-                }
-            }
-            bannerColorCache[storedBannerID] = PerformColorClustering(validPixels);
-            // 使用K-means聚类找主题色
-            return bannerColorCache[storedBannerID];
-        }
-
-        private ColorPair PerformColorClustering(List<Color> pixels) {
-            if (pixels.Count == 0) throw new System.Exception();
-            if (pixels.Count == 1) return new ColorPair(pixels[0]);
-
-            int clusterCount = Math.Min(4, pixels.Count);
-
-            var random = new System.Random(pixels.Count);
-
-            var centers = Enumerable.Range(0, clusterCount)
-                .Select(_ => {
-                    var pixel = pixels[random.Next(pixels.Count)];
-                    return new Vector3(pixel.R, pixel.G, pixel.B);
-                })
-                .ToList();
-
-            var clusters = new List<List<Color>>();
-
-            for (int iteration = 0; iteration < 10; iteration++) {
-                // 分配像素到聚类中心
-                clusters.Clear();
-                for (int i = 0; i < clusterCount; i++) {
-                    clusters.Add(new List<Color>());
-                }
-
-                foreach (var pixel in pixels) {
-                    var pixelVec = new Vector3(pixel.R, pixel.G, pixel.B);
-                    int closest = 0;
-                    float minDistance = Vector3.DistanceSquared(pixelVec, centers[0]);
-
-                    for (int i = 1; i < centers.Count; i++) {
-                        float distance = Vector3.DistanceSquared(pixelVec, centers[i]);
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            closest = i;
-                        }
-                    }
-                    clusters[closest].Add(pixel);
-                }
-
-                // 更新聚类中心
-                bool converged = true;
-                for (int i = 0; i < centers.Count; i++) {
-                    if (clusters[i].Count > 0) {
-                        float avgR = (float)clusters[i].Average(p => (double)p.R);
-                        float avgG = (float)clusters[i].Average(p => (double)p.G);
-                        float avgB = (float)clusters[i].Average(p => (double)p.B);
-                        var newCenter = new Vector3(avgR, avgG, avgB);
-
-                        if (Vector3.DistanceSquared(centers[i], newCenter) > 1f) {
-                            converged = false;
-                        }
-                        centers[i] = newCenter;
-                    }
-                }
-
-                if (converged) break;
-            }
-
-            var validClusters = new List<ClusterInfo>();
-            for (int i = 0; i < clusters.Count; i++) {
-                if (clusters[i].Count > 0) {
-                    validClusters.Add(new ClusterInfo {
-                        Center = centers[i],
-                        Count = clusters[i].Count,
-                        Brightness = 0.299f * centers[i].X + 0.587f * centers[i].Y + 0.114f * centers[i].Z,
-                        Color = VectorToColor(centers[i])
-                    });
-                }
-            }
-
-            validClusters = validClusters.OrderByDescending(c => c.Count).ToList();
-
-            for (int i = 0; i < Math.Min(4, validClusters.Count); i++) {
-                var cluster = validClusters[i];
-            }
-
-            if (validClusters.Count <= 1) {
-                return validClusters.Count == 1 ? new ColorPair(validClusters[0].Color) : new ColorPair(Color.White);
-            }
-
-            // 剔除最暗和最少的
-            if (validClusters.Count > 2) {
-                var darkest = validClusters.OrderBy(c => c.Brightness).First();
-                validClusters.Remove(darkest);
-            }
-
-            if (validClusters.Count > 2) {
-                var least = validClusters.OrderBy(c => c.Count).First();
-                validClusters.Remove(least);
-            }
-
-            if (validClusters.Count == 0) return new ColorPair(Color.White);
-            if (validClusters.Count == 1) return new ColorPair(validClusters[0].Color);
-
-            // 现在应该有两种颜色，计算颜色差异
-            var color1 = validClusters[0];
-            var color2 = validClusters[1];
-
-            float colorDistance = Vector3.Distance(color1.Center, color2.Center);
-            float brightnessDiff = Math.Abs(color1.Brightness - color2.Brightness);
-
-
-            // 根据差异决定处理方式
-            if (colorDistance < 50f && brightnessDiff < 30f) {
-                // 差异较小，按数量平均
-                int totalWeight = color1.Count + color2.Count;
-                var weightedSum = (color1.Center * color1.Count + color2.Center * color2.Count) / totalWeight;
-                return new ColorPair(VectorToColor(weightedSum));
-            } else if (brightnessDiff <= 80f) {
-                var brighter = color1.Brightness > color2.Brightness ? color1 : color2;
-                var darker = color1.Brightness <= color2.Brightness ? color1 : color2;
-
-                var enhancedBrighter = EnhanceBrightness(brighter.Center, 1.2f);
-                var enhancedDarker = EnhanceBrightness(darker.Center, 0.8f);
-                return new ColorPair(VectorToColor(enhancedBrighter), VectorToColor(enhancedDarker), true);
-            } else {
-                return new ColorPair(color1.Color, color2.Color, true);
-            }
-        }
-
-        private Vector3 EnhanceBrightness(Vector3 color, float factor) {
-            // 转换到HSL空间进行亮度调整
-            var rgbColor = VectorToColor(color);
-            float h, s, l;
-            RgbToHsl(rgbColor.R / 255f, rgbColor.G / 255f, rgbColor.B / 255f, out h, out s, out l);
-
-            // 调整亮度
-            l = MathHelper.Clamp(l * factor, 0f, 1f);
-
-            // 转换回RGB
-            var newColor = HslToRgb(h, s, l);
-            return new Vector3(newColor.R, newColor.G, newColor.B);
-        }
-
-        private void RgbToHsl(float r, float g, float b, out float h, out float s, out float l) {
-            float max = Math.Max(r, Math.Max(g, b));
-            float min = Math.Min(r, Math.Min(g, b));
-            float diff = max - min;
-
-            l = (max + min) / 2f;
-
-            if (diff == 0) {
-                h = s = 0;
-                return;
-            }
-
-            s = l > 0.5f ? diff / (2f - max - min) : diff / (max + min);
-
-            if (max == r) {
-                h = (g - b) / diff + (g < b ? 6f : 0f);
-            } else if (max == g) {
-                h = (b - r) / diff + 2f;
-            } else {
-                h = (r - g) / diff + 4f;
-            }
-            h /= 6f;
-        }
-
-        private Color HslToRgb(float h, float s, float l) {
-            float r, g, b;
-
-            if (s == 0) {
-                r = g = b = l;
-            } else {
-                float hue2rgb(float p, float q, float t) {
-                    if (t < 0) t += 1;
-                    if (t > 1) t -= 1;
-                    if (t < 1f / 6f) return p + (q - p) * 6f * t;
-                    if (t < 1f / 2f) return q;
-                    if (t < 2f / 3f) return p + (q - p) * (2f / 3f - t) * 6f;
-                    return p;
-                }
-
-                float q = l < 0.5f ? l * (1f + s) : l + s - l * s;
-                float p = 2f * l - q;
-                r = hue2rgb(p, q, h + 1f / 3f);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h - 1f / 3f);
-            }
-
-            return new Color((int)(r * 255), (int)(g * 255), (int)(b * 255));
-        }
-
-        private class ClusterInfo {
-            public Vector3 Center { get; set; }
-            public int Count { get; set; }
-            public float Brightness { get; set; }
-            public Color Color { get; set; }
-        }
-
-        private Color VectorToColor(Vector3 vector) => new Color(
-            (int)MathHelper.Clamp(vector.X, 0, 255),
-            (int)MathHelper.Clamp(vector.Y, 0, 255),
-            (int)MathHelper.Clamp(vector.Z, 0, 255));
 
         public override void SetDefaults() {
             Item.width = Item.height = 32;
@@ -480,7 +175,7 @@ namespace QualityOfGuida.Content.SpawnEgg {
                 Main.npc[npcIndex].velocity = Vector2.Zero;
             }
             if (Main.netMode != NetmodeID.Server) {
-                SoundEngine.PlaySound(ModAssets.EggCrack, spawnPosition);
+                SoundEngine.PlaySound(QoGSound.EggCrack, spawnPosition);
 
                 for (int i = 0; i < 12; i++) {
                     Vector2 particlePos = spawnPosition + Main.rand.NextVector2Circular(16, 16);
@@ -620,14 +315,16 @@ namespace QualityOfGuida.Content.SpawnEgg {
         }
 
         public static void ClearStaticCache() {
-            bannerColorCache?.Clear();
+            SpawnEggBannerColors.ClearCache();
         }
 
         public void SetBannerID(int bannerID) {
             if (storedBannerID == bannerID) return;
-            npcName = bannerID > 0 ? GetNPCDisplayName(Item.BannerToNPC(bannerID)) : "";
-            if (String.IsNullOrEmpty(npcName)) return;
             storedBannerID = bannerID;
+            npcName = bannerID > 0 ? GetNPCDisplayName(Item.BannerToNPC(bannerID)) : "";
+            if (bannerID > 0 && string.IsNullOrEmpty(npcName)) {
+                npcName = Language.GetTextValue("Mods.QualityOfGuida.Items.SpawnEggItem.UnknownEnemy");
+            }
             Item.consumable = bannerID > 0;
             cachedTexture?.Dispose();
             cachedTexture = null;

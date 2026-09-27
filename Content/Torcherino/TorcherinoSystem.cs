@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using System.Reflection;
-using QualityOfGuida.Content.Particles;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Torcherino {
     public class TorcherinoSystem : ModSystem {
@@ -23,7 +23,7 @@ namespace QualityOfGuida.Content.Torcherino {
         public override void Load() {
             // 通过反射获取 WorldGen 类中的私有方法
             if (updateOvergroundTileMethod == null) {
-                Type worldGenType = typeof(WorldGen);
+                System.Type worldGenType = typeof(WorldGen);
 
                 updateOvergroundTileMethod = worldGenType.GetMethod("UpdateWorld_OvergroundTile",
                     BindingFlags.NonPublic | BindingFlags.Static,
@@ -249,7 +249,7 @@ namespace QualityOfGuida.Content.Torcherino {
                         WorldGen.PlaceAlch(num, num2 - 1, 5);
                     if (Main.tile[num, num2].TileType == 147 || Main.tile[num, num2].TileType == 163 || Main.tile[num, num2].TileType == 164 || Main.tile[num, num2].TileType == 161 || Main.tile[num, num2].TileType == 200)
                         WorldGen.PlaceAlch(num, num2 - 1, 6);
-                    if (Main.tile[num, num2 - 1].HasTile && Main.netMode == 2)
+                    if (Main.tile[num, num2 - 1].HasTile && Main.netMode == NetmodeID.Server)
                         NetMessage.SendTileSquare(-1, num, num2 - 1);
                 }
             }
@@ -308,14 +308,18 @@ namespace QualityOfGuida.Content.Torcherino {
 
         // 清理资源
         public override void Unload() {
-            
+            ClearStaticState();
+        }
+
+        public static void ClearStaticState() {
+            activeTorches.Clear();
+            torchCircles.Clear();
+            worldScanned = false;
         }
 
         // 重置世界扫描状态
         public override void ClearWorld() {
-            activeTorches.Clear();
-            torchCircles.Clear();
-            worldScanned = false;
+            ClearStaticState();
         }
     }
 }

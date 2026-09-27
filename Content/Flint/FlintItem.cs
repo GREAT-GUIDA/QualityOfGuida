@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using QualityOfGuida.Content.Particles;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using QualityOfGuida.Content.SmartCursor;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Flint {
     public class FlintItem : ModItem {
@@ -177,7 +177,7 @@ namespace QualityOfGuida.Content.Flint {
         private void CreateNetherPortal(int left, int top, Player player) {
             // 播放激活音效
             SoundEngine.PlaySound(SoundID.Dig, new Vector2(left * 16 + 32, top * 16 + 40));
-            SoundEngine.PlaySound(ModAssets.PortalAmbience, new Vector2(left * 16 + 32, top * 16 + 40));
+            SoundEngine.PlaySound(QoGSound.PortalAmbience, new Vector2(left * 16 + 32, top * 16 + 40));
 
             // 移除现有的黑曜石块并放置地狱门瓦片
             for (int x = 0; x < 4; x++) {

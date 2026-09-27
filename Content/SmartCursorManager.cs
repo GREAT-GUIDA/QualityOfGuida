@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.SmartCursor {
     public delegate bool ValidateTargetDelegate(int x, int y);
@@ -56,9 +57,9 @@ namespace QualityOfGuida.Content.SmartCursor {
                 return;
             }
 
-            spriteBatch.EndAndBeginExt(BlendState.NonPremultiplied, null, Main.GameViewMatrix.TransformationMatrix);
+            spriteBatch.EndAndBegin(BlendState.NonPremultiplied, null, null, Main.GameViewMatrix.TransformationMatrix);
 
-            Texture2D targetTexture = ModContent.Request<Texture2D>(ModAssets.AssetDir + "/Texture/SmartCursorTarget").Value;
+            Texture2D targetTexture = ModAsset.SmartCursorTarget.Value;
             Vector2 worldPos = new Vector2(currentSmartTarget.X * 16 - 2, currentSmartTarget.Y * 16 - 2);
             Vector2 screenPos = worldPos - Main.screenPosition;
 
@@ -66,7 +67,7 @@ namespace QualityOfGuida.Content.SmartCursor {
             Color lightColor = Lighting.GetColor(currentSmartTarget.X, currentSmartTarget.Y);
 
             spriteBatch.Draw(targetTexture, screenPos, lightColor);
-            spriteBatch.EndAndBeginExt(BlendState.AlphaBlend, null, Main.UIScaleMatrix);
+            spriteBatch.EndAndBegin(BlendState.AlphaBlend, null, null, Main.UIScaleMatrix);
         }
 
         // 清理离开玩家的数据

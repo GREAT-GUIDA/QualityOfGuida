@@ -11,6 +11,7 @@ using Terraria.WorldBuilding;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using GuidaSharedCode;
 using ReLogic.Content;
 
 namespace QualityOfGuida.Content.Flint {
@@ -59,7 +60,7 @@ namespace QualityOfGuida.Content.Flint {
         /// <summary>
         /// 执行地表建筑生成
         /// </summary>
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
+        public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
             // 设置进度消息
             progress.Message = NetherPortalSystem.NetherPortalPassMessage.Value;
 
@@ -314,7 +315,7 @@ namespace QualityOfGuida.Content.Flint {
                     }
                 });
 
-                if (converter.LoadImageFromTexture(ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalGround1").Value)) {
+                if (converter.LoadImageFromTexture(ModAsset.NetherPortalGround1.Value)) {
                     converter.GenerateTiles(imageOffsetX, imageOffsetY);
                 }
 
@@ -328,7 +329,7 @@ namespace QualityOfGuida.Content.Flint {
                 converter.SetColorMapping(Color.Blue, TileActionConfig.Wall(true, WallID.GrayBrick));
 
 
-                if (converter.LoadImageFromTexture(ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalGround2").Value)) {
+                if (converter.LoadImageFromTexture(ModAsset.NetherPortalGround2.Value)) {
                     converter.GenerateTiles(imageOffsetX, imageOffsetY);
                 }
 
@@ -336,7 +337,7 @@ namespace QualityOfGuida.Content.Flint {
 
                 converter.TilePaintPreset();
 
-                if (converter.LoadImageFromTexture(ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalGround3").Value)) {
+                if (converter.LoadImageFromTexture(ModAsset.NetherPortalGround3.Value)) {
                     converter.GenerateTiles(imageOffsetX, imageOffsetY);
                 }
                 return true;

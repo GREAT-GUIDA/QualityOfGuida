@@ -8,6 +8,7 @@ using Terraria.Audio;
 using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
+using QualityOfGuida;
 using QualityOfGuida.Content.Paper;
 
 namespace QualityOfGuida.Content.NameTag
@@ -24,31 +25,16 @@ namespace QualityOfGuida.Content.NameTag
 
         public override void PostSetupContent() {
             if (ModLoader.TryGetMod("DialogueTweak", out Mod dialogueTweak)) {
-                dialogueTweak.Call("OnPostPortraitDraw", DrawSomething);
+                dialogueTweak.Call("OnPostPortraitDraw", (Action<SpriteBatch, Color, Rectangle>)DrawSomething);
             }
         }
 
         private void DrawSomething(SpriteBatch sb, Color textColor, Rectangle panel) {
-            if (_isEditing && _signIndex >= 0 && _signIndex < Main.sign.Length && Main.sign[_signIndex] != null) {
-                if (_editingNameTag != null) {
-                    // 选择贴图
-                    string texturePath = _editingNameTag.GetDynamicTexturePath();
-                    sb.End();
-                    sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, null, null, null,
-                        Main.UIScaleMatrix);
-
-                    Texture2D nameTagTexture = ModContent.Request<Texture2D>(texturePath).Value;
-
-                    Vector2 drawPos = panel.Location.ToVector2() + new Vector2(17 + 46, 18 + 47);
-                    Vector2 origin = new Vector2(nameTagTexture.Width / 2, nameTagTexture.Height / 2);
-                    float scale = 2.0f;
-                    sb.Draw(nameTagTexture, drawPos, null, Color.White, 0f, origin, scale, SpriteEffects.None, 0f);
-
-                    sb.End();
-                    sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.SamplerStateForCursor, DepthStencilState.None,
-                        RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
-                }
+            if (!_isEditing || _editingNameTag == null) {
+                return;
             }
+
+            SignEditorHelper.DrawPanelPortrait(sb, panel, _editingNameTag.GetDynamicTextureAsset());
         }
 
         public void StartEdit(NameTagItem nameTag, int signIndex, Player player) {
@@ -93,19 +79,19 @@ namespace QualityOfGuida.Content.NameTag
                         }
                         writtenNameTag.stack = 1;
                         _editingPlayer.QuickSpawnItem(_editingPlayer.GetSource_ItemUse(_editingNameTag.Item), writtenNameTag);
-                        SoundEngine.PlaySound(ModAssets.PaperWrite, _editingPlayer.Center);
+                        SoundEngine.PlaySound(QoGSound.PaperWrite, _editingPlayer.Center);
                     } else {
                         // 直接设置内容
                         if (string.Equals(newContent, _lastSignText, StringComparison.Ordinal) && !string.Equals(newContent, _originalContent, StringComparison.Ordinal)) {
                             _editingNameTag.SetContent(newContent);
-                            SoundEngine.PlaySound(ModAssets.PaperWrite, _editingPlayer.Center);
+                            SoundEngine.PlaySound(QoGSound.PaperWrite, _editingPlayer.Center);
                             for (int i = 0; i < _editingPlayer.inventory.Length; i++) {
                                 if (_editingPlayer.inventory[i]?.ModItem == _editingNameTag) {
                                     NameTagSyncSystem.SyncNameTagToServer(_editingPlayer, i, newContent);
                                     break;
                                 }
                             }
-                        } else SoundEngine.PlaySound(ModAssets.PaperClose, _editingPlayer.Center);
+                        } else SoundEngine.PlaySound(QoGSound.PaperClose, _editingPlayer.Center);
                     }
                 }
                 StopEdit();
@@ -113,16 +99,11 @@ namespace QualityOfGuida.Content.NameTag
         }
 
         private void StopEdit() {
-            // 清理虚拟告示牌
-            if (_signIndex >= 0 && _signIndex < Main.sign.Length && Main.sign[_signIndex] != null) {
-                Main.sign[_signIndex].text = "";
-            }
+            SignEditorHelper.CloseEditor(_signIndex);
             _isEditing = false;
             _editingNameTag = null;
             _signIndex = -1;
             _editingPlayer = null;
-            Main.LocalPlayer.sign = -1;
-            Main.npcChatText = "";
         }
     }
 }

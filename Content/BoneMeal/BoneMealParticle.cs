@@ -1,15 +1,15 @@
 ﻿using System;
+using GuidaSharedCode;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using QualityOfGuida.Content.Particles;
 
-namespace QualityOfGuida.Content.Torcherino {
+namespace QualityOfGuida.Content.BoneMeal {
     public class BoneMealParticle : Particle {
         public float alphaMul = 1;
         public float scaleMul = 1;
-        public override Texture2D Texture => ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Particles/BoneMeal").Value;
+        public override Texture2D Texture => ModAsset.BoneMeal.Value;
 
         public override void SetDefaults() {
             base.SetDefaults();

@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using QualityOfGuida;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -8,7 +10,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.Utilities;
-using QualityOfGuida.Content.Particles;
 
 namespace QualityOfGuida.Content.Flint {
     public class NetherPortal : ModTile {
@@ -56,7 +57,7 @@ namespace QualityOfGuida.Content.Flint {
         // 添加发光遮罩绘制
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
             // 获取发光纹理
-            Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+            Texture2D glowTexture = ModAsset.NetherPortal_Glow.Value;
 
             // 获取方块信息
             Tile tile = Main.tile[i, j];
@@ -73,9 +74,9 @@ namespace QualityOfGuida.Content.Flint {
 
             // 获取源矩形
             Rectangle sourceRect = new Rectangle(tile.TileFrameX + frameXOffset, tile.TileFrameY, 16, 16);
-            spriteBatch.EndAndBeginExt(BlendState.Additive, null, Matrix.Identity);
+            spriteBatch.EndAndBegin(BlendState.Additive, Main.DefaultSamplerState);
             spriteBatch.Draw(glowTexture, position, sourceRect, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            spriteBatch.EndAndBeginExt(BlendState.AlphaBlend, null, Matrix.Identity);
+            spriteBatch.EndAndBegin(BlendState.AlphaBlend, Main.DefaultSamplerState);
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(IsPortalCenter(i, j) ? 1 : 0);
@@ -124,11 +125,8 @@ namespace QualityOfGuida.Content.Flint {
                     float volume = 1f - (distanceToPlayer / maxDistance);
                     volume = MathHelper.Clamp(volume, 0.3f, 0.7f);
 
-                    SoundStyle ambientSound = new SoundStyle("QualityOfGuida/Assets/Sounds/PortalAmbience") {
+                    SoundStyle ambientSound = QoGSound.PortalAmbience with {
                         Volume = volume,
-                        PitchVariance = 0.1f,
-                        MaxInstances = 10,
-                        SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest
                     };
 
                     SoundEngine.PlaySound(ambientSound, portalCenter);

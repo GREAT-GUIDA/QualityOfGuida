@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using QualityOfGuida;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using QualityOfGuida.Content.Particles;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -45,7 +46,7 @@ namespace QualityOfGuida.Content.Flint {
             // 初始alpha为0，用于淡入效果
             alphaMul = Main.rand.NextFloat(0.6f, 1f);
             alpha = 0f;
-            texture = ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Particles/Generic" + (Main.rand.Next(6) + 1).ToString()).Value;
+            texture = ModAssetParticles.RandomGeneric();
         }
 
         /// <summary>

@@ -11,7 +11,6 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Audio;
 using QualityOfGuida.Content.NameTag;
-using System.Security.AccessControl;
 using Terraria.Chat;
 
 namespace QualityOfGuida.Content.NameTag {

@@ -15,7 +15,6 @@ using Terraria.ObjectData;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.Localization;
-using QualityOfGuida.Content.Particles;
 
 namespace QualityOfGuida.Content.Spawner {
     public class SpawnerTile : ModTile {

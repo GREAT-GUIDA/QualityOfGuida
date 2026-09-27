@@ -1,4 +1,4 @@
-﻿using QualityOfGuida.Content.Particles;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +11,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Spawner {
     public class SpawnerClientEffects : ModSystem {

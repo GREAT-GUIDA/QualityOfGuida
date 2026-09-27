@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -49,7 +50,7 @@ namespace QualityOfGuida.Content.Torcherino {
 
             // 加载火焰贴图
             if (!Main.dedServ) {
-                flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
+                flameTexture = ModAsset.TorcherinoTile_Flame;
             }
         }
 

@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using QualityOfGuida.Content.Particles;
 using System;
 using Terraria;
 using Terraria.Graphics.Renderers;
@@ -106,8 +106,8 @@ namespace QualityOfGuida.Content.SpawnEgg {
 
             try {
                 // 获取蒙版纹理
-                var mask1 = ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Mask1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-                var mask2 = ModContent.Request<Texture2D>("QualityOfGuida/Content/SpawnEgg/SpawnEggItem_Mask2", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                var mask1 = ModAsset.SpawnEggItem_Mask1.Value;
+                var mask2 = ModAsset.SpawnEggItem_Mask2.Value;
 
                 if (mask1 == null || mask2 == null) return;
 

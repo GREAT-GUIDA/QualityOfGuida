@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.AccessControl;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;

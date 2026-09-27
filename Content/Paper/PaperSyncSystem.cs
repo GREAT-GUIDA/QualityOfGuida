@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using Humanizer;
-using Terraria.Audio;
-using Terraria.Map;
 
-namespace QualityOfGuida.Content.Paper
-{
+namespace QualityOfGuida.Content.Paper {
     // 只需要添加一个简单的ModSystem处理网络消息
     public class PaperSyncSystem : ModSystem {
         public override void PostSetupContent() {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using QualityOfGuida.Content.Particles;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +11,7 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Flint
 {
@@ -54,7 +54,7 @@ namespace QualityOfGuida.Content.Flint
                     player.shimmering = false;
                     player.shimmerWet = false;
                     player.wet = false;
-                    player.ClearBuff(353);
+                    player.ClearBuff(BuffID.Shimmer);
                 }
 
                 Vector2 oldPos = player.position;
@@ -95,7 +95,7 @@ namespace QualityOfGuida.Content.Flint
                 player.oldPosition = player.position + player.BlehOldPositionFixer;
                 Main.TeleportEffect(player.getRect(), 0, 0, 1f, TeleportationSide.Exit, oldPos);
 
-                SoundEngine.PlaySound(ModAssets.PortalArrive, player.position);
+                SoundEngine.PlaySound(QoGSound.PortalArrive, player.position);
 
             } catch {
                 // 传送失败处理
@@ -171,7 +171,7 @@ namespace QualityOfGuida.Content.Flint
             var particleManager = ParticleManager.Instance;
             if (particleManager == null) return;
 
-            SoundEngine.PlaySound(ModAssets.PortalArrive, position);
+            SoundEngine.PlaySound(QoGSound.PortalArrive, position);
 
             // 生成特效粒子
             for (int i = 0; i < 40; i++) {

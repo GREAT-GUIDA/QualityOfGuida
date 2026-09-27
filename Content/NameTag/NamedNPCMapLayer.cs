@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
@@ -16,8 +17,8 @@ namespace QualityOfGuida.Content.NameTag {
             const float scaleIfNotSelected = 0.8f;
             const float scaleIfSelected = scaleIfNotSelected * 1.3f;
 
-            Texture2D iconTexture = ModContent.Request<Texture2D>("QualityOfGuida/Content/NameTag/NamedNPCIcon").Value;
-            Texture2D kingIconTexture = ModContent.Request<Texture2D>("QualityOfGuida/Content/NameTag/NamedNPCKingIcon").Value;
+            Texture2D iconTexture = ModAsset.NamedNPCIcon.Value;
+            Texture2D kingIconTexture = ModAsset.NamedNPCKingIcon.Value;
 
             foreach (NPC npc in Main.npc) {
                 if (!npc.active) continue;

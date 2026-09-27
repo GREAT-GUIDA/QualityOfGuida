@@ -10,7 +10,6 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using QualityOfGuida.Content.Flint;
 using Terraria.DataStructures;
-using Humanizer;
 
 namespace QualityOfGuida.Content.Spawner {
     /// <summary>
@@ -54,7 +53,7 @@ namespace QualityOfGuida.Content.Spawner {
 
         public ChestSpawnerPass(string name, float loadWeight) : base(name, loadWeight) { }
 
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
+        public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
             progress.Message = SpawnerGenerationSystem.SpawnerPassMessage.Value;
             if (!ModContent.GetInstance<ItemToggleConfig>().EnableSpawner) return;
             // 先收集所有合法的箱子
@@ -226,7 +225,7 @@ namespace QualityOfGuida.Content.Spawner {
     public class SpawnEggChestPass : GenPass {
         public SpawnEggChestPass(string name, float loadWeight) : base(name, loadWeight) { }
 
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
+        public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
             progress.Message = SpawnerGenerationSystem.SpawnEggPassMessage.Value;
 
             int chestsProcessed = 0;

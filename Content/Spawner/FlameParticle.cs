@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using QualityOfGuida.Content.Particles;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -10,7 +10,7 @@ namespace QualityOfGuida.Content.Spawner {
     public class FlameParticle : Particle {
         private float initialAlpha;
         private Vector2 windEffect;
-        public override Texture2D Texture => ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Particles/Flame").Value;
+        public override Texture2D Texture => ModAsset.Flame.Value;
 
         public override void SetDefaults() {
             base.SetDefaults();

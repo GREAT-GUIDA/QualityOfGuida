@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GuidaSharedCode;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
@@ -16,7 +17,7 @@ namespace QualityOfGuida.Content.Flint {
             const float scaleIfNotSelected = 1f;
             const float scaleIfSelected = scaleIfNotSelected * 1.5f;
             
-            Texture2D portalTexture = ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Flint/NetherPortalIcon").Value;
+            Texture2D portalTexture = ModAsset.NetherPortalIcon.Value;
             /*
             var entities = TileEntity.ByID.Values.ToList();
             // 遍历所有地狱门实体

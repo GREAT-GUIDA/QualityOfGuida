@@ -11,8 +11,8 @@ using Terraria.ModLoader.IO;
 using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
-using QualityOfGuida.Content.Particles;
 using Terraria.Graphics.Renderers;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Spawner {
     public class SpawnerTileEntity : ModTileEntity {

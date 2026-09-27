@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using QualityOfGuida.Content.Particles;
+using GuidaSharedCode;
+using QualityOfGuida;
 
 namespace QualityOfGuida.Content.Torcherino {
     public class TorcherinoParticle : Particle {
         public float alphaMul = 1;
         public float scaleMul = 1;
-        public override Texture2D Texture => ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Particles/Spotlight" + state.ToString()).Value;
+        public override Texture2D Texture => ModAssetParticles.Spotlight(state);
 
         public override void SetDefaults() {
             base.SetDefaults();
@@ -91,7 +92,7 @@ namespace QualityOfGuida.Content.Torcherino {
     public class TorcherinoCircleParticle : Particle {
         public float alphaMul = 1;
         public float scaleMul = 1;
-        public override Texture2D Texture => ModContent.Request<Texture2D>(ModAssets.ContentDir + "/Particles/TorchCircle").Value;
+        public override Texture2D Texture => ModAsset.TorchCircle.Value;
 
         public override void SetDefaults() {
             base.SetDefaults();

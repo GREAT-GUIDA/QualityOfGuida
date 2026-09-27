@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
-using QualityOfGuida.Content.Particles;
+using QualityOfGuida;
 using Terraria.Graphics.Renderers;
-using static QualityOfGuida.Content.Particles.DrawHooks;
+using GuidaSharedCode;
 
 namespace QualityOfGuida.Content.Torcherino {
     public class TorcherinoItem : GuidaItem {
@@ -20,39 +19,12 @@ namespace QualityOfGuida.Content.Torcherino {
             return ModContent.GetInstance<ItemToggleConfig>().EnableTorcherino;
         }
 
-        // 反射获取的方法（与TorcherinoSystem中相同）
-        private static MethodInfo updateOvergroundTileMethod;
-        private static MethodInfo updateUndergroundTileMethod;
+        public override ReLogic.Content.Asset<Texture2D> GetDynamicTextureAsset() => ModAsset.TorcherinoItemShow;
 
-        public override string GetDynamicTexturePath() {
-            return "QualityOfGuida/Content/Torcherino/TorcherinoItemShow";
-        }
         public override void SetStaticDefaults() {
-            // 研究解锁数量
             Item.ResearchUnlockCount = 100;
-
-            // 设置为火把类型
             ItemID.Sets.Torches[Type] = true;
-
-            // 手柄模式下单次使用
             ItemID.Sets.SingleUseInGamepad[Type] = true;
-
-            // 通过反射获取 WorldGen 类中的私有方法
-            if (updateOvergroundTileMethod == null) {
-                Type worldGenType = typeof(WorldGen);
-
-                updateOvergroundTileMethod = worldGenType.GetMethod("UpdateWorld_OvergroundTile",
-                    BindingFlags.NonPublic | BindingFlags.Static,
-                    null,
-                    new Type[] { typeof(int), typeof(int), typeof(bool), typeof(int) },
-                    null);
-
-                updateUndergroundTileMethod = worldGenType.GetMethod("UpdateWorld_UndergroundTile",
-                    BindingFlags.NonPublic | BindingFlags.Static,
-                    null,
-                    new Type[] { typeof(int), typeof(int), typeof(bool), typeof(int) },
-                    null);
-            }
         }
 
         public override void SetDefaults() {

@@ -1,10 +1,12 @@
+using GuidaSharedCode;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using QualityOfGuida;
+using ReLogic.Content;
 using QualityOfGuida.Content.Paper;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.AccessControl;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -15,7 +17,7 @@ using Terraria.ModLoader.IO;
 namespace QualityOfGuida.Content.NameTag {
     public class NameTagItem : GuidaItem {
         public string nameContent = "";
-        public NPC targetNPC; // Ä¿±êNPC
+        public NPC targetNPC; // ??ï¿½ï¿½NPC
         public override bool IsLoadingEnabled(Mod mod) {
             return ModContent.GetInstance<ItemToggleConfig>().EnableNameTag;
         }
@@ -23,19 +25,20 @@ namespace QualityOfGuida.Content.NameTag {
             return nameContent;
         }
 
-        public override string GetDynamicTexturePath() {
+        public override Asset<Texture2D> GetDynamicTextureAsset() {
             if (string.IsNullOrEmpty(nameContent)) {
-                return "QualityOfGuida/Content/NameTag/NameTagItem1";
+                return ModAsset.NameTagItem1;
             }
 
-            if (nameContent.ToLower().Contains("boulder")) return "QualityOfGuida/Content/NameTag/NameTagItem7";
-            if (nameContent.ToLower().Contains("king")) return "QualityOfGuida/Content/NameTag/NameTagItem8";
-            if (nameContent.ToLower().Contains("hitbox")) return "QualityOfGuida/Content/NameTag/NameTagItem3";
-            if (nameContent.ToLower().Contains("rainbow")) return "QualityOfGuida/Content/NameTag/NameTagItem6";
-            if (nameContent.ToLower().Contains("giant")) return "QualityOfGuida/Content/NameTag/NameTagItem5";
-            if (nameContent.ToLower().Contains("mini")) return "QualityOfGuida/Content/NameTag/NameTagItem9";
-            if (nameContent.ToLower().Contains("reverse")) return "QualityOfGuida/Content/NameTag/NameTagItem4";
-            return "QualityOfGuida/Content/NameTag/NameTagItem2";
+            string lower = nameContent.ToLower();
+            if (lower.Contains("boulder")) return ModAsset.NameTagItem7;
+            if (lower.Contains("king")) return ModAsset.NameTagItem8;
+            if (lower.Contains("hitbox")) return ModAsset.NameTagItem3;
+            if (lower.Contains("rainbow")) return ModAsset.NameTagItem6;
+            if (lower.Contains("giant")) return ModAsset.NameTagItem5;
+            if (lower.Contains("mini")) return ModAsset.NameTagItem9;
+            if (lower.Contains("reverse")) return ModAsset.NameTagItem4;
+            return ModAsset.NameTagItem2;
         }
 
         public override void SetDefaults() {
@@ -77,22 +80,22 @@ namespace QualityOfGuida.Content.NameTag {
         public override bool? UseItem(Player player) {
             if (player.altFunctionUse == 2) {
                 Item.useStyle = ItemUseStyleID.HoldUp;
-                SoundEngine.PlaySound(ModAssets.PaperOpen, player.Center);
+                SoundEngine.PlaySound(QoGSound.PaperOpen, player.Center);
                 OpenNameTagEditor(player);
                 return true;
             } else {
                 Item.useStyle = ItemUseStyleID.Swing;
 
                 if (Main.netMode == NetmodeID.SinglePlayer) {
-                    // µ¥ÈËÓÎÏ·£ºÖ±½Ó´¦Àí
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ö±ï¿½ï¿½???ï¿½ï¿½
                     return ProcessNPCNaming();
                 } else if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    // ¶àÈËÓÎÏ·¿Í»§¶Ë£º·¢ËÍÇëÇóµ½·þÎñ¶Ë
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½Í»ï¿½??ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½???ï¿½óµ½·ï¿½ï¿½ï¿½???
                     SendNamingRequest();
                     return true;
                 } else if (Main.netMode == NetmodeID.Server) {
-                    // ¶àÈËÓÎÏ··þÎñ¶Ë£º²»ÔÚÕâÀï´¦Àí£¬Í¨¹ýÍøÂçÏûÏ¢´¦Àí
-                    // µ«ÊÇÐèÒª·µ»Øtrue±íÊ¾Ê¹ÓÃ³É¹¦£¬ÕâÑù¿Í»§¶Ë²ÅÄÜÕý³£Ê¹ÓÃÎïÆ·
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½??ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½???ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½Ê¾Ê¹ï¿½Ã³É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½???ï¿½ï¿½??ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½Æ·
                     return true;
                 }
 
@@ -105,7 +108,7 @@ namespace QualityOfGuida.Content.NameTag {
 
             ModContent.GetInstance<NameTagSyncSystem>().SendNamingRequest(targetNPC, nameContent);
 
-            // ¿Í»§¶ËÁ¢¼´²¥·ÅÒôÐ§ºÍÌØÐ§×÷Îª·´À¡
+            // ï¿½Í»ï¿½??ï¿½ï¿½ï¿½ï¿½??ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½Îªï¿½ï¿½???
             SoundEngine.PlaySound(SoundID.Item1, targetNPC.Center);
             if (string.IsNullOrEmpty(nameContent)) {
                 CreateClearingEffect(targetNPC);
@@ -115,7 +118,7 @@ namespace QualityOfGuida.Content.NameTag {
         }
 
 
-        // ´¦ÀíNPCÃüÃûÂß¼­
+        // ï¿½ï¿½ï¿½ï¿½NPCï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
         private bool ProcessNPCNaming() {
             if (targetNPC == null) return false;
             if (string.IsNullOrEmpty(nameContent)) {
@@ -125,7 +128,7 @@ namespace QualityOfGuida.Content.NameTag {
             }
         }
 
-        // ÎªNPCÃüÃû
+        // ÎªNPCï¿½ï¿½ï¿½ï¿½
         private bool NameNPC(NPC npc) {
             if (npc == null || string.IsNullOrEmpty(nameContent))
                 return false;
@@ -137,7 +140,7 @@ namespace QualityOfGuida.Content.NameTag {
             return true;
         }
 
-        // Çå³ýNPCÃû×Ö
+        // ï¿½ï¿½ï¿½NPCï¿½ï¿½ï¿½ï¿½
         private bool ClearNPCName(NPC npc) {
             if (npc == null)
                 return false;
@@ -148,7 +151,7 @@ namespace QualityOfGuida.Content.NameTag {
             return true;
         }
 
-        // ´´½¨ÃüÃûÌØÐ§
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
         private void CreateNamingEffect(NPC npc) {
             for (int i = 0; i < 12; i++) {
                 Dust dust = Dust.NewDustDirect(
@@ -161,14 +164,14 @@ namespace QualityOfGuida.Content.NameTag {
             }
         }
 
-        // ´´½¨Çå³ýÃû×ÖÌØÐ§
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
         private void CreateClearingEffect(NPC npc) {
             for (int i = 0; i < 8; i++) {
                 Dust dust = Dust.NewDustDirect(
                     npc.position,
                     npc.width,
                     npc.height,
-                    DustID.Smoke); // Ê¹ÓÃÑÌÎíÌØÐ§±íÊ¾Çå³ý
+                    DustID.Smoke); // Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½
                 dust.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.3f, 1.0f);
                 dust.scale = 0.6f + Main.rand.NextFloat(0.3f);
                 dust.alpha = 100;
@@ -225,68 +228,8 @@ namespace QualityOfGuida.Content.NameTag {
         }
 
         private void OpenNameTagEditor(Player player) {
-            Main.editChest = false;
-            Main.SetNPCShopIndex(0);
-            Main.playerInventory = false;
-            Main.InGuideCraftMenu = false;
-            player.SetTalkNPC(-1);
-
-            Main.editSign = true;
-            Main.npcChatText = nameContent;
-
-            int signIndex = FindSafeSignIndex();
-            player.sign = signIndex;
-
-            if (Main.sign[signIndex] == null)
-                Main.sign[signIndex] = new Sign();
-
-            Point nearestEmptyTile = FindNearestEmptyTile(player);
-
-            Main.sign[signIndex].x = nearestEmptyTile.X;
-            Main.sign[signIndex].y = nearestEmptyTile.Y;
-            Main.sign[signIndex].text = nameContent;
-
+            int signIndex = SignEditorHelper.OpenEditor(player, nameContent);
             ModContent.GetInstance<NameTagEditWatcher>().StartEdit(this, signIndex, player);
-        }
-
-        private Point FindNearestEmptyTile(Player player) {
-            int playerTileX = (int)(player.position.X / 16);
-            int playerTileY = (int)(player.position.Y / 16);
-
-            if (!Main.tile[playerTileX, playerTileY].HasTile) {
-                return new Point(playerTileX, playerTileY);
-            }
-
-            int maxRadius = 10;
-
-            for (int radius = 1; radius <= maxRadius; radius++) {
-                for (int dx = -radius; dx <= radius; dx++) {
-                    for (int dy = -radius; dy <= radius; dy++) {
-                        if (Math.Abs(dx) != radius && Math.Abs(dy) != radius)
-                            continue;
-
-                        int checkX = playerTileX + dx;
-                        int checkY = playerTileY + dy;
-
-                        if (checkX < 0 || checkX >= Main.maxTilesX || checkY < 0 || checkY >= Main.maxTilesY)
-                            continue;
-
-                        if (!Main.tile[checkX, checkY].HasTile) {
-                            return new Point(checkX, checkY);
-                        }
-                    }
-                }
-            }
-
-            return new Point(playerTileX, playerTileY);
-        }
-
-        private int FindSafeSignIndex() {
-            for (int i = Main.sign.Length - 1; i >= Main.sign.Length - 50; i--) {
-                if (Main.sign[i] == null || string.IsNullOrEmpty(Main.sign[i].text))
-                    return i;
-            }
-            return Main.sign.Length - 1;
         }
 
         public override void SaveData(TagCompound tag) => tag["nameContent"] = nameContent;
